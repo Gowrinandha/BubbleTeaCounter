@@ -1,5 +1,4 @@
 # Bubble-Tea-Counter
-# Bubble-Tea-Counter
 Basic Details
 Team Name - Void
 Team Members - Gowrinandha B - Carmel College of Engineering and Technology
