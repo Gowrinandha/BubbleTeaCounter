@@ -75,6 +75,9 @@ Member 1 – Software & Computer Vision
 - Integrated the detection system with the interface.
 - Handled result display, screenshots, and documentation.
 
+live link
+
+https://gowrinandha.github.io/BubbleTeaCounter/
 
 
 
