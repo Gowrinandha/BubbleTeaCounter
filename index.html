@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bubble Tea Counter</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>🧋 Bubble Tea Counter</h1>
+
+        <p class="subtitle">
+            Upload a tea image and let OpenCV count the bubbles!
+        </p>
+
+        <div class="card">
+
+            <h2>📸 Upload Your Tea Image</h2>
+
+            <form action="/count" method="POST" enctype="multipart/form-data">
+
+    <input
+        type="file"
+        name="tea_image"
+        accept="image/*"
+        required
+    >
+
+    <br><br>
+
+    <button type="button" onclick="openCamera()">
+        📷 Open Camera
+    </button>
+
+    <div id="cameraBox" style="display:none; margin-top:20px;">
+
+        <video
+            id="camera"
+            width="400"
+            autoplay
+        ></video>
+
+        <br><br>
+
+        <button type="button" onclick="takePhoto()">
+            📸 Take Photo
+        </button>
+
+        <canvas
+            id="canvas"
+            style="display:none;"
+        ></canvas>
+
+    </div>
+
+    <br><br>
+
+    <button type="submit">
+        🫧 Count Bubbles
+    </button>
+
+</form>
+
+<script>
+
+let stream;
+
+function openCamera() {
+
+    document.getElementById("cameraBox").style.display = "block";
+
+    navigator.mediaDevices.getUserMedia({
+        video: true
+    })
+    .then(function(cameraStream) {
+
+        stream = cameraStream;
+
+        document.getElementById("camera").srcObject = stream;
+
+    })
+    .catch(function(error) {
+
+        alert("Camera permission was denied or camera is not available.");
+
+    });
+
+}
+
+
+function takePhoto() {
+
+    const video = document.getElementById("camera");
+    const canvas = document.getElementById("canvas");
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const context = canvas.getContext("2d");
+
+    context.drawImage(
+        video,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    canvas.toBlob(function(blob) {
+
+        const file = new File(
+            [blob],
+            "tea.jpg",
+            { type: "image/jpeg" }
+        );
+
+        const input = document.querySelector(
+            'input[name="tea_image"]'
+        );
+
+        const dataTransfer = new DataTransfer();
+
+        dataTransfer.items.add(file);
+
+        input.files = dataTransfer.files;
+
+        alert("📸 Photo captured! Now click Count Bubbles.");
+
+        if (stream) {
+
+            stream.getTracks().forEach(
+                track => track.stop()
+            );
+
+        }
+
+    }, "image/jpeg");
+
+}
+
+</script>
+
+        </div>
+
+        {% if count is defined %}
+
+        <div class="result">
+
+            <h2>🎉 Result</h2>
+
+            <div class="count">
+                {{ count }}
+            </div>
+
+            <p>Bubbles Detected</p>
+
+            {% if result_image %}
+            <img
+                src="{{ url_for('uploaded_file', filename=result_image) }}"
+                alt="Detected bubbles"
+            >
+            {% endif %}
+
+        </div>
+
+        {% endif %}
+
+        <footer>
+            Made with ❤️ using Python + Flask + OpenCV
+        </footer>
+
+    </div>
+
+</body>
+</html>
