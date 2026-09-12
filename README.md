@@ -58,6 +58,8 @@ Diagrams
 Schematic & Circuit
 Circuit: Not applicable — the project is software-based and does not require external electronic components.
 Schematic:
+build photos
+nil
 Camera → Image Capture → Image Processing → Bubble Detection → Bubble Counting → Display Result
 Video
 https://drive.google.com/file/d/1qS4AbKbFUV3hx_BYAR4G79_QIlu_yuna/view?usp=sharing
